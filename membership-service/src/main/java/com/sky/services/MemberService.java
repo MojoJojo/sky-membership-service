@@ -12,7 +12,9 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by sanketsharma on 1/12/17.
@@ -78,9 +80,11 @@ public class MemberService {
     }
 
     private GenericMessage<Member> createMessage(Member member) {
-        GenericMessage<Member> message = new GenericMessage<Member>(member);
-        MessageHeaders headers = message.getHeaders();
-        headers.put(MessageHeaders.CONTENT_TYPE, "application/json");
+        Map<String, Object> headers = new HashMap<>();
+//        headers.put(MessageHeaders.CONTENT_TYPE, "application/json");
+        GenericMessage<Member> message = new GenericMessage<Member>(member, headers);
+//        MessageHeaders headers = message.getHeaders();
+//        headers.put(MessageHeaders.CONTENT_TYPE, "application/json");
         return message;
 
     }

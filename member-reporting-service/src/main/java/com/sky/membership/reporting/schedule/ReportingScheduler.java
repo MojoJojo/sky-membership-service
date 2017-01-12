@@ -1,12 +1,9 @@
 package com.sky.membership.reporting.schedule;
 
-import com.sky.membership.reporting.persistence.model.MemberAccount;
 import com.sky.membership.reporting.persistence.repository.MemberAccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Slf4j
 @Component

@@ -8,5 +8,11 @@ import java.io.Serializable;
 public class Member implements Serializable {
     long id;
     String name;
-    String bouquet;
+    Bouquet bouquet;
+
+    public enum Bouquet {
+        PREMIUM,
+        STANDARD
+    }
+
 }

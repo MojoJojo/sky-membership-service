@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 
-import java.time.LocalDateTime;
-
 @Slf4j
 @EnableBinding(Channels.class)
 public class ReportingConsumer {
@@ -25,7 +23,7 @@ public class ReportingConsumer {
 
         MemberAccount account = MemberAccount.builder()
                 .id(member.getId())
-                .bouquet(member.getBouquet())
+                .bouquet(member.getBouquet().toString())
                 .name(member.getName())
                 .status(MemberAccount.AccountStatus.ACTIVE)
                 .build();

@@ -38,6 +38,7 @@ public class ReportingConsumer {
         MemberAccount account = memberAccountRepository.findOne(member.getId());
         if (account != null) {
             account.setStatus(MemberAccount.AccountStatus.CANCELLED);
+            memberAccountRepository.save(account);
         } else {
            log.error("Could not cancel member account with id {}. Not found.", member.getId());
         }

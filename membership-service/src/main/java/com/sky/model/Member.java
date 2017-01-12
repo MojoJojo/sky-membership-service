@@ -1,14 +1,19 @@
 package com.sky.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Member {
 
-    private enum Bouquet {
+    public enum Bouquet {
         PREMIUM,
         STANDARD
     }
-
+    @Id
+    @GeneratedValue
     private long id;
     private String name;
+    @Enumerated(value = EnumType.STRING)
     private Bouquet bouquet;
 
     public Member(){}

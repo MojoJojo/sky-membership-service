@@ -8,6 +8,7 @@ import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.integration.annotation.InboundChannelAdapter;
 import org.springframework.integration.annotation.Poller;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.support.GenericMessage;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +44,8 @@ public class MemberService {
     public Member addMember(Member member) {
 
         Member newMember = members.save(member);
-        enrollChannel.send(new GenericMessage<Member>(newMember));
+
+        enrollChannel.send(createMessage(member));
         return newMember;
 
     }
@@ -52,7 +54,7 @@ public class MemberService {
         Member member = members.findOne(id);
         if (member != null) {
             if (member.getBouquet().equals(Member.Bouquet.PREMIUM)) {
-                retainChannel.send(new GenericMessage<Member>(member));
+                retainChannel.send(createMessage(member));
 
             } else {
                 cancelChannel.send(new GenericMessage<Member>(member));
@@ -73,6 +75,14 @@ public class MemberService {
 
     public Member getMember(Long id) {
         return members.findOne(id);
+    }
+
+    private GenericMessage<Member> createMessage(Member member) {
+        GenericMessage<Member> message = new GenericMessage<Member>(member);
+        MessageHeaders headers = message.getHeaders();
+        headers.put(MessageHeaders.CONTENT_TYPE, "application/json");
+        return message;
+
     }
 
     public interface Channels {

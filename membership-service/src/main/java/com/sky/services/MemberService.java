@@ -26,6 +26,16 @@ public class MemberService {
     @Output(Channels.ENROLL_OUTPUT_CHANNEL)
     private MessageChannel enrollChannel;
 
+
+    @Autowired
+    @Output(Channels.CANCEL_OUTPUT_CHANNEL)
+    private MessageChannel cancelChannel;
+
+    @Autowired
+    @Output(Channels.RETAIN_OUTPUT_CHANNEL)
+    private MessageChannel retainChannel;
+
+
     public MemberService(MemberRepository members) {
         this.members = members;
     }
@@ -37,12 +47,22 @@ public class MemberService {
         return newMember;
 
     }
+
     public void deleteMember(long id) {
-         members.delete(id);
+        Member member = members.findOne(id);
+        if (member != null) {
+            if (member.getBouquet().equals(Member.Bouquet.PREMIUM)) {
+                retainChannel.send(new GenericMessage<Member>(member));
+
+            } else {
+                cancelChannel.send(new GenericMessage<Member>(member));
+                members.delete(id);
+            }
+        }
     }
 
     public boolean isValidMemberId(long id) {
-        if(members.findOne(id)!=null)
+        if (members.findOne(id) != null)
             return true;
         else return false;
     }
@@ -55,13 +75,20 @@ public class MemberService {
         return members.findOne(id);
     }
 
-     public interface Channels {
+    public interface Channels {
         String ENROLL_OUTPUT_CHANNEL = "enroll";
+        String CANCEL_OUTPUT_CHANNEL = "cancel";
+        String RETAIN_OUTPUT_CHANNEL = "retain";
 
 
         @Output(ENROLL_OUTPUT_CHANNEL)
         MessageChannel enrollOutputChannel();
 
+        @Output(CANCEL_OUTPUT_CHANNEL)
+        MessageChannel cancelOutputChannel();
+
+        @Output(RETAIN_OUTPUT_CHANNEL)
+        MessageChannel retainOutputChannel();
 
 
     }

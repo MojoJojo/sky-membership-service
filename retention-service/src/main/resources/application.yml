@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: retention-service
+  cloud:
+    stream:
+      bindings:
+        input:
+          destination: retain
